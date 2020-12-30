@@ -1,0 +1,20 @@
+name: ${name}
+main: de.blablubbabc.closeinvcmd.CloseInventoryCmdPlugin
+version: '${version}'
+authors: [${authors}]
+website: '${url}'
+description: '${description}'
+api-version: '1.14'
+commands:
+    closeinventory:
+      aliases: [closeinv, close]
+      description: 'Closes the player''s inventory.'
+      permission: 'closeinventory.own;closeinventory.others'
+      usage: '/<command> [player]'
+permissions:
+    closeinventory.own:
+        description: 'Allows closing the own inventory with the closeinventory command.'
+        default: true
+    closeinventory.others:
+        description: 'Allows closing the inventory of other players with the closeinventory command.'
+        default: op

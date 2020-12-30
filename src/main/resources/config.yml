@@ -1,0 +1,19 @@
+# Config of the plugin CloseInventoryCmd
+
+# If enabled, we check if the player has an inventory open before we attempt to close it.
+# Note: We cannot check if the player has his own inventory open, since that is client side.
+only-close-if-open: false
+# Whether to inform the executing player.
+inform-sender: true
+# Whether to inform the affected player.
+inform-target: false
+
+# Messages
+
+msg-too-many-arguments: "&cToo many arguments! Usage: /{label} [player]"
+msg-unknown-player: "&cUnknown player: &e{player}"
+msg-no-player-specified: "&cNo player specified!"
+msg-no-permission: "&cYou do not have the permission to do that!"
+msg-inventory-closed-sender: "&aClosed inventory of player &e{player}&a!"
+# This message is only sent if the target player does not match the executing player.
+msg-inventory-closed-target: "&7Inventory closed."

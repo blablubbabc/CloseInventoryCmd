@@ -1,0 +1,94 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+// Default tasks:
+defaultTasks 'licenseFormat', 'clean', 'build', 'install'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+group = 'de.blablubbabc'
+version = projectVersion
+
+ext.projectName = projectName
+ext.url = url
+ext.description = description
+ext.authors = authors
+ext.author = authors.split(',//s*')[0]
+
+repositories {
+	mavenCentral()
+	// Bukkit/Spigot:
+	maven {
+		url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+	}
+	mavenLocal()
+}
+
+dependencies {
+	compile 'org.bukkit:bukkit:1.14.2-R0.1-SNAPSHOT'
+
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+jar {
+	manifest {
+		attributes 'Implementation-Title': project.name,
+					'Implementation-Version': version
+	}
+}
+
+// Include and filter resources:
+processResources {
+	from(sourceSets.main.resources.srcDirs)
+	filter {
+			line ->
+			line
+			.replace('${name}', project.name)
+			.replace('${version}', project.version)
+			.replace('${author}', project.author)
+			.replace('${authors}', project.authors)
+			.replace('${url}', project.url)
+			.replace('${description}', project.description)
+	}
+}
+
+// Source compiler configuration:
+configure([compileJava, compileTestJava]) {
+	// options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
+	options.deprecation = false
+	options.encoding = 'utf8'
+}
+
+task sourceJar(type: Jar) {
+	from sourceSets.main.java
+	from sourceSets.main.resources
+	classifier = 'sources'
+}
+
+javadoc {
+	options.encoding = 'utf8'
+	failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	from javadoc.destinationDir
+	classifier = 'javadoc'
+}
+
+artifacts {
+	archives jar
+	archives sourceJar
+	archives javadocJar
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			mavenLocal()
+		}
+	}
+}
